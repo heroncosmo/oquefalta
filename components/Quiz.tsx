@@ -18,6 +18,7 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
   const [scaleValue, setScaleValue] = useState<number>(5);
   const [openAnswer, setOpenAnswer] = useState('');
   const [checklistAnswers, setChecklistAnswers] = useState<string[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | number | string[] | null>(null);
 
   const currentModule = quizData.modules[currentModuleIndex];
   const currentQuestion = currentModule?.questions[currentQuestionIndex];
@@ -67,12 +68,14 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
       setScaleValue(5);
       setOpenAnswer('');
       setChecklistAnswers([]);
+      setSelectedAnswer(null);
     } else if (currentModuleIndex < quizData.modules.length - 1) {
       setCurrentModuleIndex(currentModuleIndex + 1);
       setCurrentQuestionIndex(0);
       setScaleValue(5);
       setOpenAnswer('');
       setChecklistAnswers([]);
+      setSelectedAnswer(null);
     } else {
       // Quiz completo
       finishQuiz();
@@ -91,9 +94,28 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
     setScaleValue(5);
     setOpenAnswer('');
     setChecklistAnswers([]);
+    setSelectedAnswer(null);
   };
 
-  // Responder pergunta
+  // Selecionar resposta (toggle visual)
+  const selectAnswer = (answer: string | number | string[]) => {
+    if (selectedAnswer === answer) {
+      // Segundo clique na mesma opção = confirma e avança
+      answerQuestion(answer);
+    } else {
+      // Primeiro clique = apenas seleciona visualmente
+      setSelectedAnswer(answer);
+    }
+  };
+
+  // Confirmar resposta e avançar
+  const confirmAndNext = () => {
+    if (selectedAnswer !== null) {
+      answerQuestion(selectedAnswer);
+    }
+  };
+
+  // Responder pergunta (interna)
   const answerQuestion = (answer: string | number | string[]) => {
     if (!currentQuestion) return;
 
@@ -125,10 +147,9 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
       }
     });
 
-    // Auto-avançar após um delay
-    setTimeout(() => {
-      nextQuestion();
-    }, 500);
+    // Reset seleção e avançar
+    setSelectedAnswer(null);
+    nextQuestion();
   };
 
   // Finalizar quiz
@@ -147,16 +168,44 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
       case 'single':
         return (
           <div className="space-y-4 animate-fade-in-up">
-            {currentQuestion.options?.map((option) => (
+            {currentQuestion.options?.map((option) => {
+              const isSelected = selectedAnswer === option.id;
+              const isAnswered = responses.some(r => r.questionId === currentQuestion.id);
+
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => !isAnswered && selectAnswer(option.id)}
+                  disabled={isAnswered}
+                  className={`w-full text-left p-6 border rounded-sm transition-all duration-200 group flex items-center justify-between ${
+                    isSelected
+                      ? 'bg-brand-gold/20 border-brand-gold text-white'
+                      : isAnswered
+                      ? 'bg-white/5 border-white/10 text-slate-400 cursor-not-allowed'
+                      : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-brand-gold/50 text-slate-200 hover:text-white'
+                  }`}
+                >
+                  <span className="text-lg">{option.text}</span>
+                  <div className="flex items-center gap-2">
+                    {isSelected && <CheckCircle size={20} className="text-brand-gold" />}
+                    <ChevronRight className={`transition-all ${
+                      isSelected ? 'text-brand-gold opacity-100' : 'text-white/20 opacity-0 group-hover:opacity-100 group-hover:text-brand-gold'
+                    }`} />
+                  </div>
+                </button>
+              );
+            })}
+
+            {/* Botão Próxima para perguntas single */}
+            {selectedAnswer && !responses.some(r => r.questionId === currentQuestion.id) && (
               <button
-                key={option.id}
-                onClick={() => answerQuestion(option.id)}
-                className="w-full text-left p-6 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-gold/50 rounded-sm transition-all duration-200 group flex items-center justify-between"
+                onClick={confirmAndNext}
+                className="w-full bg-brand-gold text-brand-dark font-bold py-4 px-6 rounded-sm hover:bg-white transition-colors flex items-center justify-center gap-2 mt-6"
               >
-                <span className="text-slate-200 group-hover:text-white text-lg">{option.text}</span>
-                <ChevronRight className="text-white/20 group-hover:text-brand-gold opacity-0 group-hover:opacity-100 transition-all" />
+                Confirmar e Próxima
+                <ChevronRight size={20} />
               </button>
-            ))}
+            )}
           </div>
         );
 
