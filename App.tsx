@@ -10,12 +10,13 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FAQ from './components/AIAdvisor';
 import Checkout from './components/Checkout';
+import InvitePartner from './components/InvitePartner';
 import Quiz from './components/Quiz';
 import Report from './components/Report';
 import Login from './components/Login';
 import { X } from 'lucide-react';
 
-type ViewState = 'home' | 'checkout' | 'quiz' | 'report' | 'login';
+type ViewState = 'home' | 'checkout' | 'invite' | 'quiz' | 'report' | 'login';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
@@ -49,6 +50,11 @@ const App: React.FC = () => {
     setCurrentView('login');
   };
 
+  const navigateToInvite = () => {
+    window.scrollTo(0, 0);
+    setCurrentView('invite');
+  };
+
   const navigateToReport = () => {
     window.scrollTo(0, 0);
     setCurrentView('report');
@@ -56,7 +62,11 @@ const App: React.FC = () => {
 
   // Renderização condicional baseada na view atual
   if (currentView === 'checkout') {
-    return <Checkout onBack={navigateToHome} onSuccess={navigateToQuiz} />;
+    return <Checkout onBack={navigateToHome} onSuccess={navigateToInvite} />;
+  }
+
+  if (currentView === 'invite') {
+    return <InvitePartner onBack={navigateToHome} onContinue={navigateToQuiz} />;
   }
 
   if (currentView === 'quiz') {

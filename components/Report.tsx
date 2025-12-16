@@ -1,8 +1,12 @@
-import React from 'react';
-import { Download, Share2, LogOut, FileText, CheckCircle, BarChart2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Share2, LogOut, FileText, CheckCircle, BarChart2, TrendingUp, Heart, AlertTriangle } from 'lucide-react';
+import { QuizService } from '../services/quizService';
+import { CoupleResult } from '../types';
 
 interface ReportProps {
   onLogout: () => void;
+  partner1Responses?: any[];
+  partner2Responses?: any[];
 }
 
 const Report: React.FC<ReportProps> = ({ onLogout }) => {
