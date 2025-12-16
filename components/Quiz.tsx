@@ -101,7 +101,7 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
   const selectAnswer = (answer: string | number | string[]) => {
     if (selectedAnswer === answer) {
       // Segundo clique na mesma opção = confirma e avança
-      answerQuestion(answer);
+      answerQuestion(answer, nextQuestion);
     } else {
       // Primeiro clique = apenas seleciona visualmente
       setSelectedAnswer(answer);
@@ -116,7 +116,7 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
   };
 
   // Responder pergunta (interna)
-  const answerQuestion = (answer: string | number | string[]) => {
+  const answerQuestion = (answer: string | number | string[], callback?: () => void) => {
     if (!currentQuestion) return;
 
     let points = 0;
@@ -147,9 +147,12 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
       }
     });
 
-    // Reset seleção e avançar
+    // Reset seleção e executar callback (se fornecido)
     setSelectedAnswer(null);
-    nextQuestion();
+    if (callback) {
+      // Usar setTimeout para garantir que o estado seja atualizado
+      setTimeout(callback, 0);
+    }
   };
 
   // Finalizar quiz
