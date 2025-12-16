@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const images = [
-  "https://images.unsplash.com/photo-1516574187841-693083f69802?q=80&w=1920&auto=format&fit=crop", 
-  "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1920&auto=format&fit=crop", 
+  "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1920&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1920&auto=format&fit=crop"
 ];
 
