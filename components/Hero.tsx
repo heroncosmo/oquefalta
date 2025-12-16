@@ -4,10 +4,6 @@ const images = [
   "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1920&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1920&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1516575150278-77136aed6920?q=80&w=1920&auto=format&fit=crop",
-  "https://plus.unsplash.com/premium_photo-1711387453143-36bb84fa682d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1597663807001-540da1f29f19?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1514415008039-efa173293080?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1739932901000-2c1e88f075ae?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 ];
 
 interface HeroProps {
