@@ -19,9 +19,21 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
   const [openAnswer, setOpenAnswer] = useState('');
   const [checklistAnswers, setChecklistAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | number | string[] | null>(null);
+  const [shouldAutoAdvance, setShouldAutoAdvance] = useState(false);
 
   const currentModule = quizData.modules[currentModuleIndex];
   const currentQuestion = currentModule?.questions[currentQuestionIndex];
+
+  // useEffect para controlar avanço automático
+  useEffect(() => {
+    if (shouldAutoAdvance) {
+      setShouldAutoAdvance(false);
+      // Pequeno delay para garantir que o estado foi atualizado
+      setTimeout(() => {
+        nextQuestion();
+      }, 100);
+    }
+  }, [shouldAutoAdvance, responses]);
 
   // Calcular progresso total
   const getTotalProgress = () => {
@@ -100,8 +112,9 @@ const Quiz: React.FC<QuizProps> = ({ onHome, onFinish, partnerEmail }) => {
   // Selecionar resposta (toggle visual)
   const selectAnswer = (answer: string | number | string[]) => {
     if (selectedAnswer === answer) {
-      // Segundo clique na mesma opção = confirma e avança
-      answerQuestion(answer, nextQuestion);
+      // Segundo clique na mesma opção = confirma e avança automaticamente
+      answerQuestion(answer);
+      setShouldAutoAdvance(true);
     } else {
       // Primeiro clique = apenas seleciona visualmente
       setSelectedAnswer(answer);
